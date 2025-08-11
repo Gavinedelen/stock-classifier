@@ -1,8 +1,138 @@
-# Stock Classifier (10-Day Direction)
+# Binary Stock Movement Classifier (10-Day Direction)
 
-Binary classifier predicting whether a stock’s closing price will rise or fall 10 days ahead.
+A binary classifier that predicts whether a stock’s **closing price will rise or fall 10 trading days ahead**.  
+Built for learning and portfolio prototyping, with a focus on transparent features and reproducible evaluation.
 
-**Tech:** Python, scikit-learn, pandas, numpy, matplotlib  
-**Features:** moving averages, RSI, rolling volatility, momentum indicators  
-**How to run:** open the notebook in Colab, install deps in first cell, provide OHLCV CSV, run all cells.  
-**Results:** Add your accuracy/precision/recall here once you run it.
+---
+
+## Project Overview
+- **Universe:** 8 large-cap tickers across 4 sectors (Tech, Financials, Consumer Staples, Energy).  
+  **Tickers:** AAPL, MSFT, GS, JPM, KO, PG, XOM, CVX
+- **Period:** 2020-01-01 → 2024-01-01
+- **Data Source:** Yahoo Finance via `yfinance`
+- **Models tried:** Linear Regression (baseline), Random Forest (classifier), XGBoost (classifier)
+- **Headline result:** XGBoost reached **~64% accuracy** on held-out data from the same tickers.
+
+---
+
+## Target Definition
+For each trading day *t*, label the outcome for *t+10*:
+- **Label = 1** if `Close[t+10] > Close[t]`
+- **Label = 0** otherwise
+
+---
+
+## Features (10)
+1. **MA_5** – 5-day rolling average of close  
+2. **MA_10** – 10-day rolling average of close  
+3. **Volatility_10** – 10-day rolling standard deviation of close  
+4. **Momentum_10** – `Close[t] − Close[t−10]`  
+5. **Daily_Return** – % change in close from *t−1* to *t*  
+6. **RSI** – Relative Strength Index (momentum oscillator)  
+7. **BB_Width** – Bollinger Band width (upper − lower)  
+8. **Volume_Ratio_5** – `Volume[t] / mean(Volume[t−1…t−5])`  
+9. **DayOfWeek** – Encoded trading day (Mon–Fri)  
+10. **Month** – 1–12
+
+*Why these?* Mix of **trend**, **momentum**, **volatility**, **flow/liquidity**, and **seasonality** to capture short-horizon edges.
+
+---
+
+## Data Preparation
+1. Download OHLCV for the 8 tickers using `yfinance` over the stated period.  
+2. Compute the 10 features above per ticker/date.  
+3. Construct the binary 10-day-ahead target.  
+4. Align the panel to avoid look-ahead leakage and ensure each row is a single (date, ticker) observation.
+
+---
+
+## Modeling & Evaluation
+- **Models compared**
+  - Linear Regression (sanity-check baseline even though the task is classification)
+  - Random Forest Classifier
+  - XGBoost Classifier
+- **Split:** ~80% train / ~20% test by time/ticker (held-out data from the same tickers).  
+- **Metrics:** Primary = **Accuracy**; also review per-ticker accuracy for stability.
+
+**Illustrative outcomes**
+- Linear Regression: **~52%**  
+- Random Forest: **~60%**  
+- XGBoost: **~64%** (best overall)  
+- Per-ticker range on the test set: **~50% (XOM)** to **~74% (PG)**
+
+---
+
+## Repository Structure (suggested)
+.
+├─ notebooks/
+│  └─ stock_classifier.ipynb        # main Colab/Notebook
+├─ data/                            # optional placeholder; don't commit private data
+├─ src/                             # optional helpers (features, eval)
+├─ models/                          # optional saved artifacts
+├─ requirements.txt                 # dependencies
+└─ README.md
+
+---
+
+## Setup
+**Option A: Google Colab (recommended)**  
+Open `notebooks/stock_classifier.ipynb` in Colab and run all cells.
+
+**Option B: Local**
+    python -m venv .venv
+    # Windows: .venv\Scripts\activate
+    # macOS/Linux:
+    source .venv/bin/activate
+    pip install -r requirements.txt
+
+**requirements.txt (example)**
+    pandas
+    numpy
+    scikit-learn
+    xgboost
+    yfinance
+    matplotlib
+    ta
+
+---
+
+## How to Reproduce
+1) Open `notebooks/stock_classifier.ipynb` (Colab or local Jupyter).  
+2) Run data download + feature engineering cells for the 8 tickers and full feature set.  
+3) **Create the 10-day forward label (per ticker, no leakage):**
+    
+        # assumes one row per (Ticker, Date) with daily data
+        df = df.sort_values(["Ticker","Date"]).reset_index(drop=True)
+
+        fwd_close = df.groupby("Ticker")["Close"].shift(-10)
+        df["y"] = (fwd_close > df["Close"]).astype("Int8")  # nullable int during prep
+        df = df.dropna(subset=["y"]).copy()
+        df["y"] = df["y"].astype("int8")  # 0/1 for scikit-learn
+
+4) Train and evaluate Linear Regression (baseline), Random Forest, and XGBoost models.  
+5) Review overall accuracy and per-ticker breakdown; compare to the illustrative results in the overview.  
+6) (Optional) Tune features/hyperparameters and re-run.
+
+---
+
+## Notes & Lessons Learned
+- Very short horizons (e.g., 1-day ahead) were **too noisy**; **10-day** worked better.  
+- Correct **alignment across tickers** and splits is crucial to avoid leakage.  
+- Signal quality beats sheer number of features; focus on tractable, interpretable signals.
+
+---
+
+## Next Steps
+- Use **walk-forward/rolling** time splits.  
+- Add **probability thresholding** + simple trading rules to evaluate *economic* performance after costs.  
+- Inspect **feature importance/SHAP** on XGBoost for interpretability.  
+- Expand the **universe** and test on **out-of-sample tickers** for generalization.  
+- Try **time-series CV**, **calibrated probabilities**, and/or **LightGBM/CatBoost**.
+
+---
+
+## Disclaimer
+This project is for educational purposes only and is **not** investment advice.
+
+## Repository Structure (suggested)
+
