@@ -55,15 +55,28 @@ For each trading day *t*, label the outcome for *t+10*:
 - **Metrics:** Primary = **Accuracy**; also review per-ticker accuracy for stability.
 
 ## Results
-| Model            | Accuracy | Precision | Recall | F1   |
-|------------------|---------:|----------:|------:|-----:|
-| Linear Regression|   0.52   |   0.51    | 0.52  | 0.51 |
-| Random Forest    |   0.60   |   0.60    | 0.60  | 0.60 |
-| XGBoost          |   0.64   |   0.64    | 0.64  | 0.64 |
 
-### Baselines
-- **Class prior / coin flip:** ~50%  
-- **Always “up” (buy-and-hold direction):** equals % of up days in test
+**Test set:** 1,584 observations across 8 tickers  
+**Class balance:** Up (1) = 892, Down (0) = 692 → **Baseline (always predict Up)** = **56.3%** accuracy
+
+| Model               | Accuracy | Precision (Up) | Recall (Up) | F1 (Up) |
+|---------------------|:--------:|:--------------:|:-----------:|:-------:|
+| Logistic Regression |  0.520   |      0.55      |    0.81     |  0.66   |
+| Random Forest       |  0.598   |      0.64      |    0.65     |  0.65   |
+| XGBoost             |  **0.637** |    **0.65**    |  **0.76**   | **0.70** |
+
+**Lift vs baseline:** Random Forest **+3.5 pts**, XGBoost **+7.4 pts** (absolute)
+
+### Confusion Matrix — XGBoost (best model)
+Actual ↓ / Predicted → | **Down (0)** | **Up (1)**
+:--|--:|--:
+**Down (0)** | 335 | 357
+**Up (1)**   | 218 | 674
+
+**Notes**
+- Logistic Regression underperforms the “always up” baseline; tree-based models add meaningful signal, with **XGBoost the strongest**.
+- Class 1 (Up) performance is the focus (directional prediction); XGBoost reaches **Precision 0.65 / Recall 0.76 / F1 0.70**.
+- Next steps: calibrate class probability thresholds, add walk-forward splits, and evaluate simple trading rules (after costs) for economic relevance.
 
 
 **Illustrative outcomes**
