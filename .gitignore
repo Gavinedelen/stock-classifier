@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_convert*
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+*.env
+*.key
+*.pem
+*.p12
+service_account*.json
+
+# Data & artifacts (keep big/PII data out of git)
+data/
+datasets/
+*.csv
+*.parquet
+*.feather
+*.xlsx
+*.pkl
+models/
+*.joblib
+*.h5
+*.model
+
+# Logs & caches
+logs/
+*.log
+.cache/
+wandb/
+mlruns/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
