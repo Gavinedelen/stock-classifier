@@ -62,7 +62,7 @@ For each trading day *t*, label the outcome for *t+10*:
 
 ---
 
-## Repository Structure (suggested)
+## Repository Structure
 .
 ├─ notebooks/
 │  └─ stock_classifier.ipynb        # main Colab/Notebook
@@ -133,6 +133,4 @@ Open `notebooks/stock_classifier.ipynb` in Colab and run all cells.
 
 ## Disclaimer
 This project is for educational purposes only and is **not** investment advice.
-
-## Repository Structure (suggested)
 
