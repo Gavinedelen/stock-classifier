@@ -3,6 +3,9 @@
 A binary classifier that predicts whether a stock’s **closing price will rise or fall 10 trading days ahead**.  
 Built for learning and portfolio prototyping, with a focus on transparent features and reproducible evaluation.
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/Gavinedelen/stock-classifier/blob/main/notebooks/stock_classifier.ipynb)
+
 ---
 
 ## Project Overview
@@ -87,17 +90,27 @@ Actual ↓ / Predicted → | **Down (0)** | **Up (1)**
 
 ---
 
-## Repository Structure
+## Repository Structure (clean)
+
 .
 ├─ notebooks/
-│  └─ stock_classifier.ipynb        # main Colab/Notebook
-├─ data/                            # optional placeholder; don't commit private data
-├─ src/                             # optional helpers (features, eval)
-├─ models/                          # optional saved artifacts
-├─ requirements.txt                 # dependencies
+│  └─ stock_classifier.ipynb            # main Colab/Notebook
+├─ src/                                  # optional helpers if you add scripts
+│  ├─ features.py                        # feature engineering
+│  ├─ modeling.py                        # train/evaluate models
+│  └─ utils.py                           # load/save, metrics, plotting
+├─ assets/                                # figures for README
+│  ├─ confusion_matrix.png
+│  └─ roc_curve.png
+├─ requirements.txt
+├─ .gitignore
+├─ LICENSE
 └─ README.md
 
----
+**Notes**
+- Keep data out of git. If you want a placeholder, add `data/.gitkeep` and ignore the folder.
+- Only add `models/` later if you actually save artifacts.
+
 
 ## Setup
 **Option A: Google Colab (recommended)**  
