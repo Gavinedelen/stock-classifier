@@ -54,6 +54,18 @@ For each trading day *t*, label the outcome for *t+10*:
 - **Split:** ~80% train / ~20% test by time/ticker (held-out data from the same tickers).  
 - **Metrics:** Primary = **Accuracy**; also review per-ticker accuracy for stability.
 
+## Results
+| Model            | Accuracy | Precision | Recall | F1   |
+|------------------|---------:|----------:|------:|-----:|
+| Linear Regression|   0.52   |   0.51    | 0.52  | 0.51 |
+| Random Forest    |   0.60   |   0.60    | 0.60  | 0.60 |
+| XGBoost          |   0.64   |   0.64    | 0.64  | 0.64 |
+
+### Baselines
+- **Class prior / coin flip:** ~50%  
+- **Always “up” (buy-and-hold direction):** equals % of up days in test
+
+
 **Illustrative outcomes**
 - Linear Regression: **~52%**  
 - Random Forest: **~60%**  
