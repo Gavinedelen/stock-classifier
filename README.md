@@ -90,26 +90,24 @@ Actual ↓ / Predicted → | **Down (0)** | **Up (1)**
 
 ---
 
-## Repository Structure (clean)
+## Repository Structure
 
 .
-├─ notebooks/
-│  └─ stock_classifier.ipynb            # main Colab/Notebook
-├─ src/                                  # optional helpers if you add scripts
-│  ├─ features.py                        # feature engineering
-│  ├─ modeling.py                        # train/evaluate models
-│  └─ utils.py                           # load/save, metrics, plotting
-├─ assets/                                # figures for README
-│  ├─ confusion_matrix.png
-│  └─ roc_curve.png
-├─ requirements.txt
-├─ .gitignore
-├─ LICENSE
-└─ README.md
+.
+├── notebooks/
+│   └── stock_classifier.ipynb
+├── src/
+│   ├── features.py
+│   ├── modeling.py
+│   └── utils.py
+├── assets/
+│   ├── confusion_matrix.png
+│   └── roc_curve.png
+├── requirements.txt
+├── .gitignore
+├── LICENSE
+└── README.md
 
-**Notes**
-- Keep data out of git. If you want a placeholder, add `data/.gitkeep` and ignore the folder.
-- Only add `models/` later if you actually save artifacts.
 
 
 ## Setup
